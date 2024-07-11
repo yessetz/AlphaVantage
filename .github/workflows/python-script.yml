@@ -1,34 +1,23 @@
-name: Python Script
-
+name: python-script
 
 on: [push]
 
-
 jobs:
-
   run-python-script:
-  
     runs-on: ubuntu-latest
-    
+
     steps:
-    
-      - name: Checkout repository
-      
+    - name: Checkout repository
       uses: actions/checkout@v2
-      
-      - name: Set up Python
-      
+
+    - name: Set up Python
       uses: actions/setup-python@v2
-      
       with:
-      
         python-version: '3.9'
-      
-      - name: Install dependencies
-      
+
+    - name: Install dependencies
       run: pip install -r requirements.txt
-      
-      - name: Run Python script
+
+    - name: Run Python script
       working-directory: scripts/
-      
       run: python getVantageDataFunctions.py
