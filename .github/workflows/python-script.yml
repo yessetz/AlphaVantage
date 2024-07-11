@@ -24,7 +24,7 @@ jobs:
 
     - name: Commit and push changes
       env:
-        GITHUB_TOKEN: ${{ secrets.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 }}
+        GITHUB_TOKEN: ${{ secrets.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 }}
       run: |
         git config --global user.name 'yessetz'
         git config --global user.email 'yessetkhan@gmail.com'
