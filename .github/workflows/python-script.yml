@@ -6,30 +6,29 @@ on: [push]
 
 jobs:
 
-run-script:
-
-runs-on: ubuntu-latest
-
-steps:
-
-- name: Checkout repository
-
-uses: actions/checkout@v2
-
-- name: Set up Python
-
-uses: actions/setup-python@v2
-
-with:
-
-python-version: '3.9'
-
-- name: Install dependencies
-
-working-directory: ./scripts/
-
-run: pip install -r requirements.txt
-
-- name: Run script
-
-run: python getVantageDataFunctions.py
+  run-python-script:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - name: Checkout repository
+      
+      uses: actions/checkout@v2
+      
+      - name: Set up Python
+      
+      uses: actions/setup-python@v2
+      
+      with:
+      
+        python-version: '3.9'
+      
+      - name: Install dependencies
+      
+      run: pip install -r requirements.txt
+      
+      - name: Run Python script
+      working-directory: scripts/
+      
+      run: python getVantageDataFunctions.py
