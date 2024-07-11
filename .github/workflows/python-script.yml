@@ -21,3 +21,13 @@ jobs:
     - name: Run Python script
       working-directory: scripts/
       run: python getVantageDataFunctions.py
+
+    - name: Commit and push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.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 }}
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git commit -m "Update file via GitHub Actions"
+        git push
