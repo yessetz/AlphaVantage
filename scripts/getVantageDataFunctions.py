@@ -28,7 +28,3 @@ outputPath = pathlib.Path(__file__).parent.parent.joinpath("output/income_statem
 with open(outputPath, "w", encoding="utf-8") as f:
     json.dump(df, f)
 
-"""
-
-sdsds
-"""
