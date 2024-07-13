@@ -1,27 +1,33 @@
 import pandas as pd
 import pathlib
 import json
+from getFundamentalDataFunctions import getListingStatusActive, getListingStatuDelisted
 
-path = pathlib.Path(__file__).parent.parent.joinpath("output/income_statement/incomeStatement.json")
+keyPath = pathlib.Path(__file__).parent.parent.joinpath("keys/data.json")
 
-print(path)
-with open(path) as fileData:
-    data = json.load(fileData)
+with open(keyPath) as keys:
+    keys = json.load(keys)
 
-df = pd.json_normalize(data["annualReports"])
-print(df)
+key = keys["accounts"][0]["key"]
+
+dataActive = getListingStatusActive(key)
+dataDelisted = getListingStatuDelisted(key)
+
+dfActive = pd.DataFrame(dataActive)
+dfDelisted = pd.DataFrame(dataDelisted)
+
+df = pd.concat([dfActive, dfDelisted]) 
+
+outputPath = pathlib.Path(__file__).parent.parent.joinpath("output/listings/listingStatus.csv")
+
+df.to_csv(outputPath, index=False, header=False) 
 
 
 
 
 
 
-
-
-
-
-import pathlib
-
+'''
 companySymbol = "IBM"
 
 path = pathlib.Path(__file__).parent.parent.joinpath("keys/data.json")
@@ -55,3 +61,6 @@ for row in data:
 
 #with open(outputPath, "w", encoding="utf-8") as f:
 #    json.dump(df, f)
+
+'''
+
