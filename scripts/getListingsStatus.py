@@ -2,65 +2,29 @@ import pandas as pd
 import pathlib
 import json
 from getFundamentalDataFunctions import getListingStatusActive, getListingStatuDelisted
+from azureFunctions import storeFilesInAzureStorageAccount
 
-keyPath = pathlib.Path(__file__).parent.parent.joinpath("keys/data.json")
+# Request listing status and store in Data Lake
+def getListingStatusActive(alphaVantageKeyPath, storageAccountKeyPath, outputPath):
 
-with open(keyPath) as keys:
-    keys = json.load(keys)
+    dataActive = getListingStatusActive(alphaVantageKeyPath)
+    dataDelisted = getListingStatuDelisted(alphaVantageKeyPath)
 
-key = keys["accounts"][0]["key"]
+    dfActive = pd.DataFrame(dataActive)
+    dfDelisted = pd.DataFrame(dataDelisted)
 
-dataActive = getListingStatusActive(key)
-dataDelisted = getListingStatuDelisted(key)
+    df = pd.concat([dfActive, dfDelisted]) 
 
-dfActive = pd.DataFrame(dataActive)
-dfDelisted = pd.DataFrame(dataDelisted)
+    fileName = "listingStatus.csv"
+    outputPath = pathlib.Path(__file__).parent.parent.joinpath(outputPath + fileName)
 
-df = pd.concat([dfActive, dfDelisted]) 
-
-outputPath = pathlib.Path(__file__).parent.parent.joinpath("output/listings/listingStatus.csv")
-
-df.to_csv(outputPath, index=False, header=False) 
-
+    df.to_csv(outputPath, index=False, header=False) 
+    storeFilesInAzureStorageAccount(storageAccountKeyPath, "alphavantage/listingStatus", fileName, outputPath + fileName)
 
 
+alphaVantageKeyPath = "keys/alphavantage.json"
+storageAccountKeyPath = "keys/azurestorageaccount.json"
 
+outputPath = "/Users/yessetzhaken/Library/CloudStorage/OneDrive-Personal/AlphaVantage/output/listings/"
 
-
-'''
-companySymbol = "IBM"
-
-path = pathlib.Path(__file__).parent.parent.joinpath("keys/data.json")
-print(path) 
-
-with open(path) as keys:
-    keys = json.load(keys)
-
-key = keys["accounts"][0]["key"]
-
-df = getListingStatus(key)
-
-outputPath = pathlib.Path(__file__).parent.parent.joinpath("output/income_statement/listingStatus.json")
-
-with open(outputPath, "w", newline="", encoding="utf-8") as csvdata:
-with open('thefile.csv', 'rb') as f:
-  data = list(csv.reader(f))
-
-import collections
-counter = collections.defaultdict(int)
-for row in data:
-    counter[row[0]] += 1
-
-
-writer = csv.writer(open("/path/to/my/csv/file", 'w'))
-for row in data:
-    if counter[row[0]] >= 4:
-        writer.writerow(row)
-
-
-
-#with open(outputPath, "w", encoding="utf-8") as f:
-#    json.dump(df, f)
-
-'''
-
+getListingStatusActive(alphaVantageKeyPath, storageAccountKeyPath, outputPath)
