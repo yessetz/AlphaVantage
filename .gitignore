@@ -1,0 +1,13 @@
+# Ignore all .log files
+*.log
+
+# Ignore all directories named build
+build/
+
+# Ignore a specific file
+alphavantage.json
+azurestorageaccount.json
+
+# Ignore everything in a specific directory, except one file
+config/*
+!config/settings.yml
